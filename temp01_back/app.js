@@ -24,7 +24,7 @@ app.post('/questions', async (req, res) => {
 
     try {
         const [result] = await pool.query(
-            'INSERT INTO questions (id, 章节, 题型, 序号, 题目, 选项, 答案, 解析, 难度, 知识点, 使用频度, 出题人) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            'INSERT INTO 题库1 (id, 章节, 题型, 序号, 题目, 选项, 答案, 解析, 难度, 知识点, 使用频度, 出题人) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [id, 章节, 题型, 序号, 题目, 选项, 答案, 解析, 难度, 知识点, 使用频度, 出题人]
         );
         res.status(201).json({ id: id, message: '✅ 题目创建成功' });
@@ -42,7 +42,7 @@ app.post('/questions', async (req, res) => {
 app.get('/questions', async (req, res) => {
     try {
         // 按 id 倒序排列，最新的在前面
-        const [rows] = await pool.query('SELECT * FROM questions ORDER BY id DESC');
+        const [rows] = await pool.query('SELECT * FROM 题库1 ORDER BY id DESC');
         res.json(rows);
     } catch (error) {
         console.error(error);
@@ -62,7 +62,7 @@ app.get('/questions/:id', async (req, res) => {
         return res.status(400).json({ error: '无效的ID格式' });
     }
     try {
-        const [rows] = await pool.query('SELECT * FROM questions WHERE id = ?', [id]);
+        const [rows] = await pool.query('SELECT * FROM 题库1 WHERE id = ?', [id]);
         if (rows.length === 0) {
             return res.status(404).json({ message: '❌ 题目不存在' });
         }
@@ -84,7 +84,7 @@ app.put('/questions/:id', async (req, res) => {
 
     try {
         const [result] = await pool.query(
-            'UPDATE questions SET 章节=?, 题型=?, 序号=?, 题目=?, 选项=?, 答案=?, 解析=?, 难度=?, 知识点=?, 使用频度=?, 出题人=? WHERE id=?',
+            'UPDATE 题库1 SET 章节=?, 题型=?, 序号=?, 题目=?, 选项=?, 答案=?, 解析=?, 难度=?, 知识点=?, 使用频度=?, 出题人=? WHERE id=?',
             [章节, 题型, 序号, 题目, 选项, 答案, 解析, 难度, 知识点, 使用频度, 出题人, id]
         );
         if (result.affectedRows === 0) {
@@ -108,7 +108,7 @@ app.delete('/questions/:id', async (req, res) => {
         return res.status(400).json({ error: '无效的ID格式' });
     }
     try {
-        const [result] = await pool.query('DELETE FROM questions WHERE id = ?', [id]);
+        const [result] = await pool.query('DELETE FROM 题库1 WHERE id = ?', [id]);
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: '❌ 题目不存在，删除失败' });
         }
